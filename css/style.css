@@ -598,8 +598,7 @@ a.race-card-link:hover .race-card {
   min-width: 0;
 }
 .predict-track-col {
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 440px;
   position: sticky;
   top: 5rem;
 }

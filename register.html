@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register – F1 Predictor</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="flag">🏁</span>
+        <h1>F1 <span>Predictor</span></h1>
+      </div>
+
+      <h2>Create an account</h2>
+
+      <div class="alert alert-error"   id="reg-error"></div>
+      <div class="alert alert-success" id="reg-success"></div>
+
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" placeholder="e.g. max33" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password <span style="font-size:0.78rem;color:#666">(min. 6 characters)</span></label>
+          <input type="password" id="password" name="password" autocomplete="new-password" placeholder="••••••••" required />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm-password" autocomplete="new-password" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="index.html">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    if (AUTH.isLoggedIn()) window.location.href = "dashboard.html";
+
+    document.getElementById("register-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username        = document.getElementById("username").value;
+      const password        = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+      const errorEl         = document.getElementById("reg-error");
+      const successEl       = document.getElementById("reg-success");
+
+      errorEl.classList.remove("show");
+      successEl.classList.remove("show");
+
+      if (password !== confirmPassword) {
+        errorEl.textContent = "Passwords do not match.";
+        errorEl.classList.add("show");
+        return;
+      }
+
+      const result = AUTH.register(username, password);
+      if (result.ok) {
+        successEl.textContent = "Account created! Redirecting to login…";
+        successEl.classList.add("show");
+        document.getElementById("register-form").reset();
+        setTimeout(() => (window.location.href = "index.html"), 1500);
+      } else {
+        errorEl.textContent = result.error;
+        errorEl.classList.add("show");
+      }
+    });
+  </script>
+</body>
+</html>

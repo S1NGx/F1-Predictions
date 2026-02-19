@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – F1 Predictor</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="flag">🏁</span>
+        <h1>F1 <span>Predictor</span></h1>
+      </div>
+
+      <h2>Sign in to your account</h2>
+
+      <div class="alert alert-error" id="login-error"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" placeholder="your_username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </form>
+
+      <div class="auth-footer">
+        No account? <a href="register.html">Create one</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Redirect already-logged-in users straight to dashboard
+    if (AUTH.isLoggedIn()) window.location.href = "dashboard.html";
+
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const errorEl = document.getElementById("login-error");
+
+      const result = AUTH.login(username, password);
+      if (result.ok) {
+        window.location.href = "dashboard.html";
+      } else {
+        errorEl.textContent = result.error;
+        errorEl.classList.add("show");
+      }
+    });
+  </script>
+</body>
+</html>

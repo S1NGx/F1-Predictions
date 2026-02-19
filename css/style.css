@@ -1,0 +1,231 @@
+/* ============================================================
+   style.css – F1 Predictor global styles
+   Palette: dark bg, F1 red (#e10600), white text
+   ============================================================ */
+
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red:      #e10600;
+  --red-dark: #a80400;
+  --bg:       #0f0f0f;
+  --surface:  #1a1a1a;
+  --surface2: #242424;
+  --border:   #333;
+  --text:     #f0f0f0;
+  --muted:    #888;
+  --radius:   8px;
+  --font:     'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+a { color: var(--red); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Auth pages (login / register) ── */
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background:
+    radial-gradient(ellipse at 70% 20%, rgba(225, 6, 0, 0.12) 0%, transparent 60%),
+    var(--bg);
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.8rem;
+}
+
+.auth-logo .flag { font-size: 1.6rem; }
+
+.auth-logo h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.auth-logo h1 span { color: var(--red); }
+
+.auth-card h2 {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 1.6rem;
+  font-weight: 400;
+}
+
+/* ── Forms ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1rem;
+  padding: 0.65rem 0.85rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-group input:focus { border-color: var(--red); }
+
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+.btn-primary:hover { background: var(--red-dark); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover { background: var(--surface2); }
+
+.auth-footer {
+  margin-top: 1.2rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── Alert / error ── */
+.alert {
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+.alert.show { display: block; }
+.alert-error { background: rgba(225, 6, 0, 0.15); border: 1px solid var(--red); color: #ff8a86; }
+.alert-success { background: rgba(0, 200, 80, 0.12); border: 1px solid #00c850; color: #5dffa4; }
+
+/* ── Dashboard layout ── */
+.dash-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dash-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.dash-logo span { color: var(--red); }
+
+.dash-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.dash-user strong { color: var(--text); }
+
+.dash-main {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+}
+
+.card h3 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.card .placeholder-text {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Utility ── */
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-left: 3px solid var(--red);
+  padding-left: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .auth-card { padding: 1.8rem 1.2rem; }
+}

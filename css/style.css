@@ -360,10 +360,14 @@ a:hover { text-decoration: underline; }
   white-space: nowrap;
 }
 
-.rc-flag {
-  font-size: 2rem;
-  line-height: 1;
+.rc-flag-img {
+  width: 38px;
+  height: auto;
+  border-radius: 3px;
+  object-fit: cover;
+  display: block;
   margin: 0.1rem 0 0.35rem;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
 }
 
 /* ── Race card body: text left, track right ── */
@@ -446,9 +450,13 @@ a:hover { text-decoration: underline; }
 }
 
 .next-race-flag {
-  font-size: 2rem;
+  width: 72px;
+  height: auto;
+  border-radius: 4px;
   display: block;
-  margin: 0.3rem 0;
+  margin: 0.4rem 0 0.5rem;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .next-race-dates {

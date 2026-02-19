@@ -172,7 +172,7 @@ a:hover { text-decoration: underline; }
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 0 2rem;
-  height: 70px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -184,15 +184,17 @@ a:hover { text-decoration: underline; }
 .dash-logo {
   display: flex;
   align-items: center;
+  align-self: stretch;
+  padding: 8px 0;
   gap: 0.5rem;
   font-weight: 700;
   font-size: 1.1rem;
 }
 
 .dash-logo span { color: var(--red); }
-.dash-logo-img { height: 54px; width: auto; display: block; object-fit: contain; }
+.dash-logo-img { height: 100%; width: auto; display: block; object-fit: contain; }
 
-/* Nav bar buttons (slightly larger than the old inline overrides) */
+/* Nav bar buttons – fixed size regardless of navbar height */
 .dash-user .btn { padding: 0.45rem 1rem; font-size: 0.9rem; }
 
 .dash-user {

@@ -348,6 +348,52 @@ a:hover { text-decoration: underline; }
   margin: 0.1rem 0 0.35rem;
 }
 
+/* ── Race card body: text left, track right ── */
+.rc-body {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.rc-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.rc-track-wrap {
+  flex-shrink: 0;
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rc-track-img {
+  width: 100%;
+  height: auto;
+  max-height: 90px;
+  object-fit: contain;
+  /* Invert black SVG to white for the dark theme */
+  filter: invert(1) opacity(0.55);
+  transition: filter 0.2s;
+}
+
+.race-card--next .rc-track-img {
+  filter: invert(1) opacity(0.85);
+}
+
+.race-card--past .rc-track-img {
+  filter: invert(1) opacity(0.25);
+}
+
+.race-card:hover .rc-track-img {
+  filter: invert(1) opacity(0.9);
+}
+
 .rc-name {
   font-size: 0.88rem;
   font-weight: 700;

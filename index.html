@@ -43,13 +43,13 @@
     // Redirect already-logged-in users straight to dashboard
     if (AUTH.isLoggedIn()) window.location.href = "dashboard.html";
 
-    document.getElementById("login-form").addEventListener("submit", (e) => {
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
       const errorEl = document.getElementById("login-error");
 
-      const result = AUTH.login(username, password);
+      const result = await AUTH.login(username, password);
       if (result.ok) {
         window.location.href = "dashboard.html";
       } else {

@@ -48,7 +48,7 @@
   <script>
     if (AUTH.isLoggedIn()) window.location.href = "dashboard.html";
 
-    document.getElementById("register-form").addEventListener("submit", (e) => {
+    document.getElementById("register-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const username        = document.getElementById("username").value;
       const password        = document.getElementById("password").value;
@@ -65,7 +65,7 @@
         return;
       }
 
-      const result = AUTH.register(username, password);
+      const result = await AUTH.register(username, password);
       if (result.ok) {
         successEl.textContent = "Account created! Redirecting to login…";
         successEl.classList.add("show");

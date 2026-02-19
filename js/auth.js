@@ -1,17 +1,16 @@
 /**
- * auth.js – Client-side authentication using localStorage.
- * Users are stored as an array of { username, passwordHash } objects.
+ * auth.js – Authentication backed by a Cloudflare Worker.
+ * Registration and login are performed via fetch() to the Worker API.
  * The active session is kept in sessionStorage so it clears on tab close.
  *
- * NOTE: This is intentionally simple client-side auth for a friend-group game.
- * Do not use this pattern for anything requiring real security.
+ * NOTE: This is intentionally simple auth for a friend-group game.
  */
 
 const AUTH = (() => {
-  const USERS_KEY = "f1p_users";
+  const API = "https://f1predictions.stiliyan1703.workers.dev";
   const SESSION_KEY = "f1p_session";
 
-  // Very basic hash (djb2) – good enough for a private friend game
+  // Very basic hash (djb2) – raw password never leaves the browser
   function hashPassword(str) {
     let hash = 5381;
     for (let i = 0; i < str.length; i++) {
@@ -20,39 +19,42 @@ const AUTH = (() => {
     return (hash >>> 0).toString(16);
   }
 
-  function getUsers() {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
-  function register(username, password) {
+  async function register(username, password) {
     username = username.trim().toLowerCase();
     if (!username || !password) return { ok: false, error: "All fields are required." };
     if (username.length < 3) return { ok: false, error: "Username must be at least 3 characters." };
     if (password.length < 6) return { ok: false, error: "Password must be at least 6 characters." };
 
-    const users = getUsers();
-    if (users.find((u) => u.username === username)) {
-      return { ok: false, error: "Username already taken." };
+    try {
+      const res = await fetch(`${API}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, passwordHash: hashPassword(password) }),
+      });
+      return await res.json();
+    } catch {
+      return { ok: false, error: "Network error. Please try again." };
     }
-
-    users.push({ username, passwordHash: hashPassword(password) });
-    saveUsers(users);
-    return { ok: true };
   }
 
-  function login(username, password) {
+  async function login(username, password) {
     username = username.trim().toLowerCase();
-    const users = getUsers();
-    const user = users.find((u) => u.username === username);
-    if (!user || user.passwordHash !== hashPassword(password)) {
-      return { ok: false, error: "Invalid username or password." };
+    if (!username || !password) return { ok: false, error: "All fields are required." };
+
+    try {
+      const res = await fetch(`${API}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, passwordHash: hashPassword(password) }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify({ username }));
+      }
+      return data;
+    } catch {
+      return { ok: false, error: "Network error. Please try again." };
     }
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ username }));
-    return { ok: true };
   }
 
   function logout() {

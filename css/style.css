@@ -171,8 +171,8 @@ a:hover { text-decoration: underline; }
 .dash-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 1.5rem;
-  height: 56px;
+  padding: 0 2rem;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -190,7 +190,10 @@ a:hover { text-decoration: underline; }
 }
 
 .dash-logo span { color: var(--red); }
-.dash-logo-img { height: 36px; width: auto; display: block; object-fit: contain; }
+.dash-logo-img { height: 54px; width: auto; display: block; object-fit: contain; }
+
+/* Nav bar buttons (slightly larger than the old inline overrides) */
+.dash-user .btn { padding: 0.45rem 1rem; font-size: 0.9rem; }
 
 .dash-user {
   display: flex;

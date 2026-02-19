@@ -59,6 +59,34 @@ const RACES_2026 = [
   { round: 24, flag: "images/flags/uae.png",          name: "Abu Dhabi Grand Prix",     location: "Yas Marina",        start: "2026-12-04", end: "2026-12-06", hasSprint: false },
 ];
 
+/* ── Track info (image + stats + description) keyed by round ─────────── */
+const TRACK_INFO = {
+  1:  { image: "images/full_track/2026trackmelbournedetailed.avif",        length: "~5.278 km", corners: "~14", downforce: "Balanced",        bestDriver: "Lewis Hamilton",                description: "A semi-street circuit around Melbourne's parklands; popular season opener with close racing and variable weather." },
+  2:  { image: "images/full_track/2026trackshanghaidetailed.avif",         length: "~5.451 km", corners: "~16", downforce: "Balanced / High",  bestDriver: "Max Verstappen",                description: "Featuring a sweeping first corner and long straights, China has been a staple venue blending speed and technical sections." },
+  3:  { image: "images/full_track/2026tracksuzukadetailed.avif",           length: "~5.807 km", corners: "~18", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "One of the few figure-eight tracks in F1; famed for challenging high-speed esses and passionate fans." },
+  4:  { image: "images/full_track/2026tracksakhirdetailed.avif",           length: "5.412 km",  corners: "~15", downforce: "Balanced",        bestDriver: "Lewis Hamilton",                description: "Desert night race with abrasive surface and strategic tyre play." },
+  5:  { image: "images/full_track/2026trackjeddahdetailed.avif",           length: "~6.175 km", corners: "~27", downforce: "High",             bestDriver: "Max Verstappen",                description: "A fast, modern street track on the Red Sea with long sections at speed and tight urban shots." },
+  6:  { image: "images/full_track/2026trackmiamidedetailed.avif",          length: "~5.412 km", corners: "~19", downforce: "Balanced",        bestDriver: "Max Verstappen",                description: "A newer street-style circuit around the Hard Rock Stadium, known for vibrant atmosphere and asphalt grip." },
+  7:  { image: "images/full_track/2026trackmontrealdetailed.avif",         length: "4.361 km",  corners: "~14", downforce: "Balanced",        bestDriver: "Lewis Hamilton",                description: "A fans' favourite on Île Notre-Dame with long straights and heavy braking zones." },
+  8:  { image: "images/full_track/2026trackmontecarlodetailed.avif",       length: "3.337 km",  corners: "~19", downforce: "High",             bestDriver: "Max Verstappen",                description: "The iconic tight street circuit around Monte-Carlo harbours prestige over overtaking; a win here is career gold." },
+  9:  { image: "images/full_track/2026trackcatalunyadetailed.avif",        length: "4.657 km",  corners: "~16", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "A classic European test of downforce and balance, often used in winter testing." },
+  10: { image: "images/full_track/2026trackspielbergdetailed.avif",        length: "4.326 km",  corners: "10",  downforce: "Balanced / Low",  bestDriver: "Max Verstappen",                description: "Short, punchy lap with elevation changes; suits efficient cars and late braking." },
+  11: { image: "images/full_track/2026tracksilverstonedetailed.avif",      length: "5.891 km",  corners: "~18", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "The Home of British Motorsport with historic high-speed sections used since 1950." },
+  12: { image: "images/full_track/2026trackspafrancorchampsdetailed.avif", length: "7.004 km",  corners: "~19", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "Among F1's longest and most revered circuits, with unpredictable weather and iconic Eau Rouge." },
+  13: { image: "images/full_track/2026trackhungaroringdetailed.avif",      length: "4.381 km",  corners: "~14", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "Twisty and technical, sometimes likened to karting at speed." },
+  14: { image: "images/full_track/2026trackzandvoortdetailed.avif",        length: "4.259 km",  corners: "~14", downforce: "High",             bestDriver: "Max Verstappen",                description: "Banked corners and coastal winds make this a unique technical challenge." },
+  15: { image: "images/full_track/2026trackmonzadetailed.avif",            length: "5.793 km",  corners: "~11", downforce: "Low",              bestDriver: "Lewis Hamilton / M. Schumacher", description: "The Temple of Speed featuring huge top speeds and historic tifosi crowds." },
+  16: { image: "images/full_track/2026trackmadringdetailed.avif",          length: "~5.47 km",  corners: "~22", downforce: "Balanced / High",  bestDriver: "To be established",             description: "New hybrid urban/road circuit debuting in 2026, blending tight city sections with open pieces." },
+  17: { image: "images/full_track/2026trackbakudetailed.avif",             length: "6.003 km",  corners: "~20", downforce: "Balanced",        bestDriver: "S. Pérez / Max Verstappen",      description: "Street course with long straights and narrow old-town confrontations." },
+  18: { image: "images/full_track/2026tracksingaporedetailed.avif",        length: "5.063 km",  corners: "~23", downforce: "High",             bestDriver: "Sebastian Vettel",              description: "Night race through downtown streets with high humidity and slow corners." },
+  19: { image: "images/full_track/2026trackaustindetailed.avif",           length: "5.513 km",  corners: "~20", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "Technical and flowing, with a steep uphill Turn 1 and big overtaking zones." },
+  20: { image: "images/full_track/2026trackmexicocitydetailed.avif",       length: "4.304 km",  corners: "~17", downforce: "Balanced",        bestDriver: "Max Verstappen",                description: "High-altitude challenge with passionate fans and heavy braking into the stadium section." },
+  21: { image: "images/full_track/2026trackinterlagosdetailed.avif",       length: "4.309 km",  corners: "~15", downforce: "High",             bestDriver: "Lewis Hamilton",                description: "Classic undulating track known for changing weather and late-season drama." },
+  22: { image: "images/full_track/2026tracklasvegasdetailed.avif",         length: "~6.12 km",  corners: "~17", downforce: "Balanced",        bestDriver: "Max Verstappen",                description: "Night race on a street layout with glamorous vibe and long straights." },
+  23: { image: "images/full_track/2026tracklusaildetailed.avif",           length: "~5.419 km", corners: "~16", downforce: "Balanced",        bestDriver: "Max Verstappen",                description: "Desert asphalt with high speeds and smooth surface, testing aerodynamics." },
+  24: { image: "images/full_track/2026trackyasmarinacircuitdetailed.avif", length: "5.281 km",  corners: "~16", downforce: "Balanced",        bestDriver: "Lewis Hamilton",                description: "Season finale under lights at a modern circuit with mixed low and medium-speed corners." },
+};
+
 /* ── Scoring (mirrors worker.js) ─────────────────────────────────────── */
 function computeScore(pred, result) {
   let total = 0;
@@ -173,6 +201,44 @@ function showResults(pred, result) {
   }).join("");
 }
 
+/* ── Track info panel ────────────────────────────────────────────────── */
+function renderTrackPanel(race) {
+  const panel = document.getElementById("track-panel");
+  if (!panel) return;
+  const info = TRACK_INFO[race.round];
+  if (!info) { panel.style.display = "none"; return; }
+
+  panel.innerHTML = `
+    <div class="track-panel">
+      <div class="track-panel-imgwrap">
+        <img class="track-panel-img" src="${info.image}" alt="${race.name} track map" loading="lazy" />
+      </div>
+      <div class="track-panel-body">
+        <div class="track-panel-title">${race.location}</div>
+        <div class="track-panel-stats">
+          <div class="track-stat">
+            <span class="track-stat-label">Circuit length</span>
+            <span class="track-stat-value">${info.length}</span>
+          </div>
+          <div class="track-stat">
+            <span class="track-stat-label">Corners</span>
+            <span class="track-stat-value">${info.corners}</span>
+          </div>
+          <div class="track-stat">
+            <span class="track-stat-label">Downforce level</span>
+            <span class="track-stat-value">${info.downforce}</span>
+          </div>
+          <div class="track-stat track-stat--driver">
+            <span class="track-stat-label">Best current driver</span>
+            <span class="track-stat-value">${info.bestDriver}</span>
+          </div>
+        </div>
+        <p class="track-panel-desc">${info.description}</p>
+      </div>
+    </div>
+  `;
+}
+
 /* ── Main ─────────────────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", async () => {
   AUTH.requireAuth();
@@ -190,6 +256,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Update page title
   document.title = `R${round} ${race.name} – F1 Predictor`;
+
+  // Render track info panel
+  renderTrackPanel(race);
 
   // Render hero
   document.getElementById("race-hero").innerHTML = `

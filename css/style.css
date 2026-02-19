@@ -3,6 +3,23 @@
    Palette: dark bg, F1 red (#e10600), white text
    ============================================================ */
 
+/* ── Fonts ── */
+@font-face {
+  font-family: 'KHInterference';
+  src: url('../fonts/KHInterference-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHInterference';
+  src: url('../fonts/KHInterference-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Reset & base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,7 +33,7 @@
   --text:     #f0f0f0;
   --muted:    #888;
   --radius:   8px;
-  --font:     'Segoe UI', system-ui, sans-serif;
+  --font:     'KHInterference', 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
@@ -311,7 +328,7 @@ a:hover { text-decoration: underline; }
 }
 
 .rc-round {
-  font-size: 0.65rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--muted);
   letter-spacing: 0.4px;
@@ -337,7 +354,8 @@ a:hover { text-decoration: underline; }
 
 .rc-days {
   margin-left: auto;
-  font-size: 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: var(--muted);
   white-space: nowrap;
 }

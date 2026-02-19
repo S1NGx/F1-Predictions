@@ -598,8 +598,8 @@ a.race-card-link:hover .race-card {
   min-width: 0;
 }
 .predict-track-col {
-  width: 360px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
   position: sticky;
   top: 5rem;
 }
@@ -622,7 +622,7 @@ a.race-card-link:hover .race-card {
   width: 100%;
   display: block;
   object-fit: contain;
-  max-height: 220px;
+  max-height: 380px;
 }
 .track-panel-body {
   padding: 1.25rem;

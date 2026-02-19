@@ -27,7 +27,7 @@ function corsHeaders(request) {
     : "";
   return {
     "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
 }
@@ -57,19 +57,37 @@ async function handleRegister(request, env) {
   }
 
   // Check if username is already taken
-  const existing = await env.DB
-    .prepare("SELECT username FROM users WHERE username = ?")
-    .bind(username)
-    .first();
+  let existing;
+  try {
+    existing = await env.DB
+      .prepare("SELECT username FROM users WHERE username = ?")
+      .bind(username)
+      .first();
+  } catch (err) {
+    console.error("DB lookup error:", err);
+    return json({ ok: false, error: "Database error (lookup): " + err.message }, 500);
+  }
+
   if (existing) {
     return json({ ok: false, error: "Username already taken." });
   }
 
   // Store the user
-  await env.DB
-    .prepare("INSERT INTO users (username, password) VALUES (?, ?)")
-    .bind(username, passwordHash)
-    .run();
+  let result;
+  try {
+    result = await env.DB
+      .prepare("INSERT INTO users (username, password) VALUES (?, ?)")
+      .bind(username, passwordHash)
+      .run();
+    console.log("Insert result:", JSON.stringify(result));
+  } catch (err) {
+    console.error("DB insert error:", err);
+    return json({ ok: false, error: "Database error (insert): " + err.message }, 500);
+  }
+
+  if (!result.success) {
+    return json({ ok: false, error: "Insert did not succeed." }, 500);
+  }
 
   return json({ ok: true });
 }
@@ -88,10 +106,16 @@ async function handleLogin(request, env) {
     return json({ ok: false, error: "All fields are required." });
   }
 
-  const user = await env.DB
-    .prepare("SELECT password FROM users WHERE username = ?")
-    .bind(username)
-    .first();
+  let user;
+  try {
+    user = await env.DB
+      .prepare("SELECT password FROM users WHERE username = ?")
+      .bind(username)
+      .first();
+  } catch (err) {
+    return json({ ok: false, error: "Database error: " + err.message }, 500);
+  }
+
   if (!user || user.password !== passwordHash) {
     return json({ ok: false, error: "Invalid username or password." });
   }
@@ -107,6 +131,28 @@ export default {
     // Handle CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers });
+    }
+
+    // GET / – health check
+    if (request.method === "GET" && url.pathname === "/") {
+      return new Response(JSON.stringify({ ok: true, status: "F1 Predictor Worker running" }), {
+        headers: { "Content-Type": "application/json", ...headers },
+      });
+    }
+
+    // GET /debug – verify DB binding and read current user count
+    if (request.method === "GET" && url.pathname === "/debug") {
+      try {
+        const { results } = await env.DB.prepare("SELECT id, username FROM users").all();
+        return new Response(JSON.stringify({ ok: true, users: results }), {
+          headers: { "Content-Type": "application/json", ...headers },
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ ok: false, error: err.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...headers },
+        });
+      }
     }
 
     if (request.method !== "POST") {

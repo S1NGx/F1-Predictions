@@ -83,6 +83,7 @@ a:hover { text-decoration: underline; }
 }
 
 .auth-logo h1 span { color: var(--red); }
+.auth-logo-img { height: 80px; width: auto; display: block; margin: 0 auto; object-fit: contain; }
 
 .auth-card h2 {
   font-size: 1.1rem;
@@ -189,6 +190,7 @@ a:hover { text-decoration: underline; }
 }
 
 .dash-logo span { color: var(--red); }
+.dash-logo-img { height: 36px; width: auto; display: block; object-fit: contain; }
 
 .dash-user {
   display: flex;

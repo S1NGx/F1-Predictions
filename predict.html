@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Predict – F1 Predictor</title>
+  <link rel="icon" href="logo_short.jpg" type="image/jpeg" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
     /* Track info panel – inlined to guarantee styles load on all deployments */
     .predict-main{max-width:1300px}
+    .dash-logo-img{height:36px;width:auto;display:block;object-fit:contain}
     .predict-layout{display:flex;gap:2rem;align-items:flex-start}
     .predict-form-col{flex:1;min-width:0}
     .predict-track-col{flex:0 0 440px;position:sticky;top:5rem}
@@ -29,7 +31,7 @@
 
   <!-- ── Header ── -->
   <header class="dash-header">
-    <div class="dash-logo">🏁 F1 <span>Predictor</span></div>
+    <div class="dash-logo"><img src="logo.jpg" alt="GridPick" class="dash-logo-img" /></div>
     <div class="dash-user">
       <a href="calendar.html" class="btn btn-ghost" style="padding:0.35rem 0.8rem;font-size:0.85rem;">← Calendar</a>
       <button id="logout-btn" class="btn btn-ghost" style="padding:0.35rem 0.8rem;font-size:0.85rem;">Log out</button>

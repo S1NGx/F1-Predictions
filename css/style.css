@@ -295,6 +295,20 @@ a:hover { text-decoration: underline; }
   margin-top: 0;
 }
 
+.race-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-auto-rows: 1px; /* overridden below */
+  gap: 1rem;
+  margin-top: 0;
+}
+
+/* Force all rows to the same height as the tallest card */
+a.race-card-link {
+  display: flex;
+  height: 100%;
+}
+
 .race-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -304,6 +318,9 @@ a:hover { text-decoration: underline; }
   flex-direction: column;
   gap: 0.25rem;
   transition: transform 0.15s, border-color 0.15s;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .race-card--past {

@@ -155,8 +155,40 @@ export default {
       }
     }
 
+    // GET /debug-insert – do a real test insert then delete it, to verify writes work
+    if (request.method === "GET" && url.pathname === "/debug-insert") {
+      const testUser = "__test__" + Date.now();
+      const steps = {};
+      try {
+        const insertResult = await env.DB
+          .prepare("INSERT INTO users (username, password) VALUES (?, ?)")
+          .bind(testUser, "testhash")
+          .run();
+        steps.insert = { success: insertResult.success, meta: insertResult.meta };
+      } catch (err) {
+        steps.insert = { error: err.message };
+      }
+      try {
+        await env.DB.prepare("DELETE FROM users WHERE username = ?").bind(testUser).run();
+        steps.cleanup = "ok";
+      } catch (err) {
+        steps.cleanup = { error: err.message };
+      }
+      return new Response(JSON.stringify({ ok: true, steps }), {
+        headers: { "Content-Type": "application/json", ...headers },
+      });
+    }
+
     if (request.method !== "POST") {
       return json({ ok: false, error: "Method not allowed." }, 405, headers);
+    }
+
+    // POST /debug-echo – reflects the raw body back so you can verify what the worker receives
+    if (url.pathname === "/debug-echo") {
+      const raw = await request.text();
+      return new Response(JSON.stringify({ ok: true, received: raw }), {
+        headers: { "Content-Type": "application/json", ...headers },
+      });
     }
 
     let response;

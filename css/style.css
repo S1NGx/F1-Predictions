@@ -226,6 +226,160 @@ a:hover { text-decoration: underline; }
   padding-left: 0.75rem;
 }
 
+/* ── Calendar card (full-width row) ── */
+.card-wide {
+  grid-column: 1 / -1;
+}
+
+/* ── Calendar list ── */
+.cal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 0.6rem;
+  max-height: 480px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.cal-list::-webkit-scrollbar { width: 5px; }
+.cal-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.cal-item {
+  display: grid;
+  grid-template-columns: 2.2rem 2rem 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.cal-item:last-child { border-bottom: none; }
+
+.cal-item--past {
+  opacity: 0.38;
+}
+
+.cal-item--next {
+  background: rgba(225, 6, 0, 0.1);
+  border: 1px solid rgba(225, 6, 0, 0.35) !important;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+.cal-item--future {
+  opacity: 0.75;
+}
+
+.cal-round {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.cal-flag {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.cal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.cal-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cal-item--next .cal-name { color: #fff; }
+
+.cal-location {
+  font-size: 0.73rem;
+  color: var(--muted);
+}
+
+.cal-dates {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.cal-badge {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+}
+
+/* ── Next Race card ── */
+.next-race-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0.5rem 0 0.25rem;
+}
+
+.next-race-flag {
+  font-size: 2rem;
+  display: block;
+  margin: 0.3rem 0;
+}
+
+.next-race-dates {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.next-race-countdown {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  min-width: 52px;
+}
+
+.countdown-num {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--red);
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.15rem;
+}
+
 @media (max-width: 480px) {
   .auth-card { padding: 1.8rem 1.2rem; }
+  .cal-item { grid-template-columns: 2rem 1.8rem 1fr auto; gap: 0.4rem; }
 }

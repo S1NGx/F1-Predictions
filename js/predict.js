@@ -205,10 +205,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   // Determine state
-  const today    = new Date(); today.setHours(0, 0, 0, 0);
-  const raceEnd  = new Date(race.end  + "T00:00:00");
-  const isPast   = raceEnd < today;
-  const isLocked = isPast; // can't predict after race ends
+  const today       = new Date(); today.setHours(0, 0, 0, 0);
+  const raceEnd     = new Date(race.end   + "T00:00:00");
+  const raceStart   = new Date(race.start + "T00:00:00");
+  const isPast      = raceEnd < today;
+
+  // Find the next upcoming race (first whose end date >= today)
+  const nextRace    = RACES_2026.find(r => new Date(r.end + "T00:00:00") >= today);
+  const isNotYetOpen = nextRace && race.round > nextRace.round;
+
+  const isLocked    = isPast || isNotYetOpen;
 
   // Show sprint section if applicable
   if (race.hasSprint) document.getElementById("sprint-section").style.display = "block";
@@ -216,8 +222,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Populate driver dropdowns
   populateDriverSelects();
 
-  // Lock form if race is over
-  if (isLocked) {
+  // Lock form
+  if (isPast) {
     const banner = document.getElementById("pred-banner");
     banner.style.display = "block";
     banner.className = "pred-banner pred-banner--locked";
@@ -225,6 +231,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("submit-btn").disabled = true;
     document.getElementById("submit-btn").style.display = "none";
     document.getElementById("fetch-row").style.display = "flex";
+  } else if (isNotYetOpen) {
+    const banner = document.getElementById("pred-banner");
+    banner.style.display = "block";
+    banner.className = "pred-banner pred-banner--info";
+    banner.textContent = `Predictions for this race open once the ${nextRace.name} weekend is over.`;
+    document.getElementById("submit-btn").disabled = true;
+    document.getElementById("submit-btn").style.display = "none";
+    // Disable all form inputs
+    document.getElementById("predict-form").querySelectorAll("select, input").forEach(el => el.disabled = true);
   }
 
   // Load existing prediction

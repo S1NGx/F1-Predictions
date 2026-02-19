@@ -58,6 +58,25 @@ const ALLOWED_ORIGINS = [
 /* ── Top-4 teams excluded from "Best of the Rest" ── */
 const TOP4_TEAMS = ["ferrari", "red bull racing", "mercedes", "mclaren"];
 
+/* ── Race end dates (YYYY-MM-DD) keyed by round number ─────────────── */
+const RACE_ENDS = {
+   1: "2026-03-08",  2: "2026-03-15",  3: "2026-03-29",  4: "2026-04-12",
+   5: "2026-04-19",  6: "2026-05-03",  7: "2026-05-24",  8: "2026-06-07",
+   9: "2026-06-14", 10: "2026-06-28", 11: "2026-07-05", 12: "2026-07-19",
+  13: "2026-07-26", 14: "2026-08-23", 15: "2026-09-06", 16: "2026-09-13",
+  17: "2026-09-26", 18: "2026-10-11", 19: "2026-10-25", 20: "2026-11-01",
+  21: "2026-11-08", 22: "2026-11-21", 23: "2026-11-29", 24: "2026-12-06",
+};
+
+/** Returns the round number of the next upcoming race (first where end >= today) */
+function nextOpenRound() {
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  for (let r = 1; r <= 24; r++) {
+    if (RACE_ENDS[r] >= today) return r;
+  }
+  return null; // season over
+}
+
 /* ── Scoring ─────────────────────────────────────────────────────────────── */
 function computeScore(pred, result) {
   let total = 0;
@@ -173,6 +192,17 @@ async function handleSavePrediction(request, env) {
   const { username, round, pole, podium_p1, podium_p2, podium_p3, sprint_win, best_tr, sc_count, retirements } = body;
   if (!username || !round || !podium_p1 || !podium_p2 || !podium_p3 || !best_tr || !sc_count) {
     return json({ ok: false, error: "Missing required fields." });
+  }
+
+  // Only the current upcoming round is open for predictions
+  const openRound = nextOpenRound();
+  if (openRound === null)           return json({ ok: false, error: "The 2026 season is over." }, 403);
+  if (parseInt(round) !== openRound) {
+    const today = new Date().toISOString().slice(0, 10);
+    const isPast = RACE_ENDS[parseInt(round)] < today;
+    return json({ ok: false, error: isPast
+      ? "Predictions for this race are now closed."
+      : "Predictions for this race are not open yet." }, 403);
   }
 
   try {

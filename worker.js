@@ -53,6 +53,7 @@
 
 const ALLOWED_ORIGINS = [
   "https://f1-predictions-7a8.pages.dev",
+  "https://f1predictions.stiliyan1703.workers.dev",
 ];
 
 /* ── Top-4 teams excluded from "Best of the Rest" ── */
@@ -66,6 +67,16 @@ const RACE_ENDS = {
   13: "2026-07-26", 14: "2026-08-23", 15: "2026-09-06", 16: "2026-09-13",
   17: "2026-09-26", 18: "2026-10-11", 19: "2026-10-25", 20: "2026-11-01",
   21: "2026-11-08", 22: "2026-11-21", 23: "2026-11-29", 24: "2026-12-06",
+};
+
+/* ── Race start dates (Friday – predictions lock after this day) ──── */
+const RACE_STARTS = {
+   1: "2026-03-06",  2: "2026-03-13",  3: "2026-03-27",  4: "2026-04-10",
+   5: "2026-04-17",  6: "2026-05-01",  7: "2026-05-22",  8: "2026-06-05",
+   9: "2026-06-12", 10: "2026-06-26", 11: "2026-07-03", 12: "2026-07-17",
+  13: "2026-07-24", 14: "2026-08-21", 15: "2026-09-04", 16: "2026-09-11",
+  17: "2026-09-24", 18: "2026-10-09", 19: "2026-10-23", 20: "2026-10-30",
+  21: "2026-11-06", 22: "2026-11-19", 23: "2026-11-27", 24: "2026-12-04",
 };
 
 /** Returns the round number of the next upcoming race (first where end >= today) */
@@ -131,12 +142,15 @@ function computeScore(pred, result) {
 
 /* ── CORS helpers ─────────────────────────────────────────────────────── */
 function corsHeaders(request) {
-  const origin  = request.headers.get("Origin") || "*";
-  const allowed = ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin) ? origin : "";
+  const origin  = request.headers.get("Origin") || "";
+  const allowed = !origin || ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin)
+    ? (origin || "*")
+    : ALLOWED_ORIGINS[0]; // fall back to the primary allowed origin
   return {
     "Access-Control-Allow-Origin":  allowed,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Credentials": "false",
   };
 }
 
@@ -196,13 +210,19 @@ async function handleSavePrediction(request, env) {
 
   // Only the current upcoming round is open for predictions
   const openRound = nextOpenRound();
-  if (openRound === null)           return json({ ok: false, error: "The 2026 season is over." }, 403);
+  if (openRound === null) return json({ ok: false, error: "The 2026 season is over." }, 403);
   if (parseInt(round) !== openRound) {
-    const today = new Date().toISOString().slice(0, 10);
-    const isPast = RACE_ENDS[parseInt(round)] < today;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const isPast   = RACE_ENDS[parseInt(round)] < todayStr;
     return json({ ok: false, error: isPast
       ? "Predictions for this race are now closed."
       : "Predictions for this race are not open yet." }, 403);
+  }
+
+  // Predictions lock after the first day (Friday) of the race weekend
+  const today = new Date().toISOString().slice(0, 10);
+  if (today > RACE_STARTS[openRound]) {
+    return json({ ok: false, error: "Predictions are locked. The race weekend is underway." }, 403);
   }
 
   try {
@@ -269,14 +289,14 @@ async function handleLeaderboard(env) {
       if (!result) continue;
 
       if (!scoreMap[pred.username]) {
-        scoreMap[pred.username] = { username: pred.username, total: 0, rounds: 0 };
+        scoreMap[pred.username] = { username: pred.username, total_points: 0, rounds_played: 0 };
       }
       const { total } = computeScore(pred, result);
-      scoreMap[pred.username].total  += total;
-      scoreMap[pred.username].rounds += 1;
+      scoreMap[pred.username].total_points  += total;
+      scoreMap[pred.username].rounds_played += 1;
     }
 
-    const board = Object.values(scoreMap).sort((a, b) => b.total - a.total);
+    const board = Object.values(scoreMap).sort((a, b) => b.total_points - a.total_points);
     return json({ ok: true, leaderboard: board });
   } catch (err) {
     return json({ ok: false, error: "Database error: " + err.message }, 500);
@@ -340,11 +360,11 @@ async function handleFetchResults(url, env) {
     }
 
     /* 4 – Race podium + retirements */
-    const classified = await finalPositions(raceSK);
-    const podium_p1  = driverMap[classified[0]?.driver_number]?.acronym || "";
-    const podium_p2  = driverMap[classified[1]?.driver_number]?.acronym || "";
-    const podium_p3  = driverMap[classified[2]?.driver_number]?.acronym || "";
-    const retirements = Math.max(0, 20 - classified.length);
+    const classified  = await finalPositions(raceSK);
+    const podium_p1   = driverMap[classified[0]?.driver_number]?.acronym || "";
+    const podium_p2   = driverMap[classified[1]?.driver_number]?.acronym || "";
+    const podium_p3   = driverMap[classified[2]?.driver_number]?.acronym || "";
+    const retirements = Math.max(0, 22 - classified.length); // 22 drivers in 2026
 
     /* 5 – Pole from qualifying */
     let pole = "";
@@ -360,7 +380,7 @@ async function handleFetchResults(url, env) {
       sprint_win    = driverMap[spFinal[0]?.driver_number]?.acronym || null;
     }
 
-    /* 7 – Safety car / red flag count */
+    /* 7 – Safety car / red flag count (VSC excluded – different intervention) */
     const rcRes  = await fetch(`${openf1}/race_control?session_key=${raceSK}`);
     const rcData = await rcRes.json();
     let scCount  = 0;
@@ -368,7 +388,8 @@ async function handleFetchResults(url, env) {
       const cat  = (msg.category || "").toLowerCase();
       const flag = (msg.flag     || "").toLowerCase();
       const txt  = (msg.message  || "").toLowerCase();
-      if (cat === "safetycar" || txt.includes("safety car") || txt.includes("virtual safety car")) scCount++;
+      const isVsc = txt.includes("virtual safety car") || txt.includes("vsc");
+      if (!isVsc && (cat === "safetycar" || txt.includes("safety car"))) scCount++;
       if ((cat === "flag" && flag === "red") || txt.includes("red flag")) scCount++;
     }
     const sc_count = scCount === 0 ? "0" : scCount <= 2 ? "1-2" : "3+";

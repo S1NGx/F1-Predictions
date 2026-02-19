@@ -208,13 +208,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const today       = new Date(); today.setHours(0, 0, 0, 0);
   const raceEnd     = new Date(race.end   + "T00:00:00");
   const raceStart   = new Date(race.start + "T00:00:00");
-  const isPast      = raceEnd < today;
+  const isPast           = raceEnd < today;
+  const isWeekendStarted = today > raceStart;  // Saturday or later = locked
 
   // Find the next upcoming race (first whose end date >= today)
-  const nextRace    = RACES_2026.find(r => new Date(r.end + "T00:00:00") >= today);
+  const nextRace     = RACES_2026.find(r => new Date(r.end + "T00:00:00") >= today);
   const isNotYetOpen = nextRace && race.round > nextRace.round;
 
-  const isLocked    = isPast || isNotYetOpen;
+  const isLocked = isPast || isWeekendStarted || isNotYetOpen;
 
   // Show sprint section if applicable
   if (race.hasSprint) document.getElementById("sprint-section").style.display = "block";
@@ -231,6 +232,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("submit-btn").disabled = true;
     document.getElementById("submit-btn").style.display = "none";
     document.getElementById("fetch-row").style.display = "flex";
+  } else if (isWeekendStarted) {
+    const banner = document.getElementById("pred-banner");
+    banner.style.display = "block";
+    banner.className = "pred-banner pred-banner--locked";
+    banner.textContent = `The ${race.name} weekend is underway. Predictions are locked.`;
+    document.getElementById("submit-btn").disabled = true;
+    document.getElementById("submit-btn").style.display = "none";
+    document.getElementById("predict-form").querySelectorAll("select, input").forEach(el => el.disabled = true);
   } else if (isNotYetOpen) {
     const banner = document.getElementById("pred-banner");
     banner.style.display = "block";

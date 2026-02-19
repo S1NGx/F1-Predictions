@@ -54,6 +54,8 @@
 const ALLOWED_ORIGINS = [
   "https://f1-predictions-7a8.pages.dev",
   "https://f1predictions.stiliyan1703.workers.dev",
+  "https://gridpick.online",
+  "https://www.gridpick.online",
 ];
 
 /* ── Top-4 teams excluded from "Best of the Rest" ── */

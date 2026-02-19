@@ -55,9 +55,11 @@
       const confirmPassword = document.getElementById("confirm-password").value;
       const errorEl         = document.getElementById("reg-error");
       const successEl       = document.getElementById("reg-success");
+      const submitBtn       = e.target.querySelector("button[type=submit]");
 
       errorEl.classList.remove("show");
       successEl.classList.remove("show");
+      errorEl.textContent = "";
 
       if (password !== confirmPassword) {
         errorEl.textContent = "Passwords do not match.";
@@ -65,14 +67,26 @@
         return;
       }
 
-      const result = await AUTH.register(username, password);
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Creating account…";
+
+      let result;
+      try {
+        result = await AUTH.register(username, password);
+      } catch (err) {
+        result = { ok: false, error: "Unexpected error: " + err.message };
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Create Account";
+
       if (result.ok) {
         successEl.textContent = "Account created! Redirecting to login…";
         successEl.classList.add("show");
         document.getElementById("register-form").reset();
         setTimeout(() => (window.location.href = "index.html"), 1500);
       } else {
-        errorEl.textContent = result.error;
+        errorEl.textContent = result.error || "Unknown error. Check console for details.";
         errorEl.classList.add("show");
       }
     });

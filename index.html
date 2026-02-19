@@ -45,15 +45,31 @@
 
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const errorEl = document.getElementById("login-error");
+      const username  = document.getElementById("username").value;
+      const password  = document.getElementById("password").value;
+      const errorEl   = document.getElementById("login-error");
+      const submitBtn = e.target.querySelector("button[type=submit]");
 
-      const result = await AUTH.login(username, password);
+      errorEl.classList.remove("show");
+      errorEl.textContent = "";
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Signing in…";
+
+      let result;
+      try {
+        result = await AUTH.login(username, password);
+      } catch (err) {
+        result = { ok: false, error: "Unexpected error: " + err.message };
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Sign In";
+
       if (result.ok) {
         window.location.href = "dashboard.html";
       } else {
-        errorEl.textContent = result.error;
+        errorEl.textContent = result.error || "Unknown error. Check console for details.";
         errorEl.classList.add("show");
       }
     });

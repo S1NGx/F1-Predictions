@@ -172,7 +172,7 @@ a:hover { text-decoration: underline; }
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 0 2rem;
-  height: 90px;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: space-between;

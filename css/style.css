@@ -226,104 +226,151 @@ a:hover { text-decoration: underline; }
   padding-left: 0.75rem;
 }
 
-/* ── Calendar card (full-width row) ── */
-.card-wide {
-  grid-column: 1 / -1;
+/* ── Clickable card (Next Race → calendar.html) ── */
+.card-clickable {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 
-/* ── Calendar list ── */
-.cal-list {
+.card-clickable:hover {
+  border-color: var(--red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(225, 6, 0, 0.15);
+  text-decoration: none;
+}
+
+.card-arrow {
+  opacity: 0.45;
+  font-style: normal;
+  margin-left: 0.3rem;
+  transition: opacity 0.2s, transform 0.2s;
+  display: inline-block;
+}
+
+.card-clickable:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* ── Calendar page subtitle ── */
+.cal-page-subtitle {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0.5rem 0 1.5rem;
+  padding-left: 0.2rem;
+}
+
+/* ── Race grid (calendar.html) ── */
+.race-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.race-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.1rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  margin-top: 0.6rem;
-  max-height: 480px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  gap: 0.25rem;
+  transition: transform 0.15s, border-color 0.15s;
 }
 
-.cal-list::-webkit-scrollbar { width: 5px; }
-.cal-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-.cal-item {
-  display: grid;
-  grid-template-columns: 2.2rem 2rem 1fr auto;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 0.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  border-radius: 4px;
-  transition: background 0.15s;
+.race-card--past {
+  opacity: 0.35;
 }
 
-.cal-item:last-child { border-bottom: none; }
-
-.cal-item--past {
-  opacity: 0.38;
+.race-card--next {
+  border-color: var(--red);
+  box-shadow: 0 0 0 1px var(--red), 0 4px 20px rgba(225, 6, 0, 0.18);
+  background: rgba(225, 6, 0, 0.06);
 }
 
-.cal-item--next {
-  background: rgba(225, 6, 0, 0.1);
-  border: 1px solid rgba(225, 6, 0, 0.35) !important;
-  border-radius: 6px;
+.race-card--future {
+  opacity: 0.72;
+}
+
+.race-card--future:hover,
+.race-card--next:hover {
+  transform: translateY(-2px);
+  border-color: var(--red);
   opacity: 1;
 }
 
-.cal-item--future {
-  opacity: 0.75;
+.rc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
-.cal-round {
-  font-size: 0.68rem;
+.rc-round {
+  font-size: 0.65rem;
   font-weight: 700;
   color: var(--muted);
-  text-align: center;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
-.cal-flag {
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-.cal-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.cal-name {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.cal-item--next .cal-name { color: #fff; }
-
-.cal-location {
-  font-size: 0.73rem;
-  color: var(--muted);
-}
-
-.cal-dates {
-  font-size: 0.75rem;
-  color: var(--muted);
-  white-space: nowrap;
-  text-align: right;
-}
-
-.cal-badge {
+.rc-badge {
   display: inline-block;
   background: var(--red);
   color: #fff;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 800;
-  letter-spacing: 0.8px;
-  padding: 0.15rem 0.4rem;
+  letter-spacing: 0.7px;
+  padding: 0.12rem 0.4rem;
   border-radius: 3px;
-  margin-bottom: 0.15rem;
   text-transform: uppercase;
+}
+
+.rc-badge--done {
+  background: var(--surface2);
+  color: var(--muted);
+}
+
+.rc-days {
+  margin-left: auto;
+  font-size: 0.65rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.rc-flag {
+  font-size: 2rem;
+  line-height: 1;
+  margin: 0.1rem 0 0.35rem;
+}
+
+.rc-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.rc-circuit {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.rc-location {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.rc-dates {
+  font-size: 0.75rem;
+  color: var(--red);
+  font-weight: 600;
+  margin-top: auto;
+  padding-top: 0.5rem;
 }
 
 /* ── Next Race card ── */
@@ -381,5 +428,5 @@ a:hover { text-decoration: underline; }
 
 @media (max-width: 480px) {
   .auth-card { padding: 1.8rem 1.2rem; }
-  .cal-item { grid-template-columns: 2rem 1.8rem 1fr auto; gap: 0.4rem; }
+  .race-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }

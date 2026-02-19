@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 Calendar – F1 Predictor</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Top navigation bar ── -->
+  <header class="dash-header">
+    <div class="dash-logo">🏁 F1 <span>Predictor</span></div>
+    <div class="dash-user">
+      <a href="dashboard.html" class="btn btn-ghost" style="padding:0.35rem 0.8rem;font-size:0.85rem;">← Dashboard</a>
+      <button id="logout-btn" class="btn btn-ghost" style="padding:0.35rem 0.8rem;font-size:0.85rem;">Log out</button>
+    </div>
+  </header>
+
+  <!-- ── Main content ── -->
+  <main class="dash-main">
+    <h2 class="section-title">2026 Season Calendar</h2>
+    <p class="cal-page-subtitle" id="cal-subtitle">Loading…</p>
+    <div class="race-grid" id="race-grid"></div>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/calendar.js"></script>
+</body>
+</html>

@@ -61,50 +61,7 @@ function countdownTo(dateStr) {
 }
 
 /* ── Calendar renderer ───────────────────────────────────────────────── */
-function renderCalendar() {
-  const calList = document.getElementById("cal-list");
-  if (!calList) return;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  // Find index of the next race (first whose end date >= today)
-  let nextIdx = -1;
-  for (let i = 0; i < RACES_2026.length; i++) {
-    const raceEnd = new Date(RACES_2026[i].end + "T00:00:00");
-    if (raceEnd >= today) { nextIdx = i; break; }
-  }
-
-  calList.innerHTML = RACES_2026.map((r, i) => {
-    const raceEnd   = new Date(r.end + "T00:00:00");
-    const isPast    = raceEnd < today;
-    const isNext    = i === nextIdx;
-    const stateClass = isPast ? "cal-item--past" : isNext ? "cal-item--next" : "cal-item--future";
-
-    return `
-      <div class="cal-item ${stateClass}">
-        <div class="cal-round">R${r.round}</div>
-        <div class="cal-flag">${r.flag}</div>
-        <div class="cal-info">
-          ${isNext ? '<span class="cal-badge">Next</span>' : ""}
-          <span class="cal-name">${r.name}</span>
-          <span class="cal-location">${r.location}</span>
-        </div>
-        <div class="cal-dates">${fmtDateRange(r.start, r.end)}</div>
-      </div>`;
-  }).join("");
-
-  // Auto-scroll so the next race is visible
-  if (nextIdx > 0) {
-    const items = calList.querySelectorAll(".cal-item");
-    if (items[nextIdx]) {
-      // Scroll with a small delay so layout is settled
-      setTimeout(() => {
-        items[nextIdx].scrollIntoView({ block: "center", behavior: "smooth" });
-      }, 120);
-    }
-  }
-}
+// Full calendar rendering lives in js/calendar.js (calendar.html page)
 
 /* ── Next Race card renderer ─────────────────────────────────────────── */
 function renderNextRace() {
@@ -179,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", () => AUTH.logout());
   }
 
-  // Render calendar & next race
-  renderCalendar();
+  // Render next race card
   renderNextRace();
 });

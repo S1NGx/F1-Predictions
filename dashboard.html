@@ -23,11 +23,11 @@
 
     <div class="dash-grid">
 
-      <!-- Upcoming Race -->
-      <div class="card" id="next-race-card">
-        <h3>🏎️ Next Race</h3>
+      <!-- Upcoming Race – click to open full calendar -->
+      <a class="card card-clickable" id="next-race-card" href="calendar.html">
+        <h3>🏎️ Next Race <span class="card-arrow">→</span></h3>
         <p class="placeholder-text" id="next-race-placeholder">Loading…</p>
-      </div>
+      </a>
 
       <!-- My Predictions -->
       <div class="card">
@@ -39,12 +39,6 @@
       <div class="card">
         <h3>🏆 Leaderboard</h3>
         <p class="placeholder-text">No scores yet. Be the first to predict!</p>
-      </div>
-
-      <!-- Season Calendar -->
-      <div class="card card-wide" id="calendar-card">
-        <h3>📅 2026 Season Calendar</h3>
-        <div class="cal-list" id="cal-list"></div>
       </div>
 
     </div>

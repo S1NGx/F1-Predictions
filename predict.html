@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predict – F1 Predictor</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="dash-header">
+    <div class="dash-logo">🏁 F1 <span>Predictor</span></div>
+    <div class="dash-user">
+      <a href="calendar.html" class="btn btn-ghost" style="padding:0.35rem 0.8rem;font-size:0.85rem;">← Calendar</a>
+      <button id="logout-btn" class="btn btn-ghost" style="padding:0.35rem 0.8rem;font-size:0.85rem;">Log out</button>
+    </div>
+  </header>
+
+  <!-- ── Race hero ── -->
+  <div class="predict-hero" id="race-hero">
+    <!-- populated by predict.js -->
+  </div>
+
+  <!-- ── Main ── -->
+  <main class="predict-main">
+
+    <!-- Status banner -->
+    <div class="pred-banner" id="pred-banner" style="display:none;"></div>
+
+    <!-- ── Prediction form ── -->
+    <form id="predict-form" class="pred-form" novalidate>
+
+      <!-- Pole Position -->
+      <section class="pred-section">
+        <div class="pred-section-header">
+          <span class="pred-section-title">Pole Position</span>
+          <span class="pred-pts">10 pts</span>
+        </div>
+        <div class="pred-field" id="field-pole">
+          <select class="pred-select" name="pole" id="pole">
+            <option value="">— Select driver —</option>
+          </select>
+          <div class="pred-result-badge" id="badge-pole" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- Podium -->
+      <section class="pred-section">
+        <div class="pred-section-header">
+          <span class="pred-section-title">Race Podium</span>
+          <span class="pred-pts">25 · 18 · 15 pts &nbsp;|&nbsp; wrong pos. 10 pts</span>
+        </div>
+
+        <div class="pred-podium-row">
+          <div class="pred-podium-slot">
+            <div class="pred-podium-pos pos-1">P1</div>
+            <select class="pred-select" name="podium_p1" id="podium_p1">
+              <option value="">— Driver —</option>
+            </select>
+            <div class="pred-result-badge" id="badge-p1" style="display:none;"></div>
+          </div>
+          <div class="pred-podium-slot">
+            <div class="pred-podium-pos pos-2">P2</div>
+            <select class="pred-select" name="podium_p2" id="podium_p2">
+              <option value="">— Driver —</option>
+            </select>
+            <div class="pred-result-badge" id="badge-p2" style="display:none;"></div>
+          </div>
+          <div class="pred-podium-slot">
+            <div class="pred-podium-pos pos-3">P3</div>
+            <select class="pred-select" name="podium_p3" id="podium_p3">
+              <option value="">— Driver —</option>
+            </select>
+            <div class="pred-result-badge" id="badge-p3" style="display:none;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sprint Winner (conditionally shown) -->
+      <section class="pred-section" id="sprint-section" style="display:none;">
+        <div class="pred-section-header">
+          <span class="pred-section-title">🏃 Sprint Winner</span>
+          <span class="pred-pts">8 pts</span>
+        </div>
+        <div class="pred-field" id="field-sprint">
+          <select class="pred-select" name="sprint_win" id="sprint_win">
+            <option value="">— Select driver —</option>
+          </select>
+          <div class="pred-result-badge" id="badge-sprint" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- Best of the Rest -->
+      <section class="pred-section">
+        <div class="pred-section-header">
+          <span class="pred-section-title">Best of the Rest</span>
+          <span class="pred-pts">10 pts &nbsp;|&nbsp; first non-top-4 team</span>
+        </div>
+        <div class="pred-field" id="field-best-tr">
+          <select class="pred-select" name="best_tr" id="best_tr">
+            <option value="">— Select team —</option>
+            <option value="Aston Martin">Aston Martin</option>
+            <option value="Alpine">Alpine</option>
+            <option value="Williams">Williams</option>
+            <option value="Racing Bulls">Racing Bulls</option>
+            <option value="Audi">Audi</option>
+            <option value="Haas F1 Team">Haas</option>
+          </select>
+          <div class="pred-result-badge" id="badge-best-tr" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- Safety Car / Red Flag -->
+      <section class="pred-section">
+        <div class="pred-section-header">
+          <span class="pred-section-title">Safety Cars &amp; Red Flags</span>
+          <span class="pred-pts">10 pts &nbsp;|&nbsp; combined total</span>
+        </div>
+        <div class="pred-radio-group" id="field-sc">
+          <label class="pred-radio-label">
+            <input type="radio" name="sc_count" value="0" />
+            <span class="pred-radio-btn">0</span>
+          </label>
+          <label class="pred-radio-label">
+            <input type="radio" name="sc_count" value="1-2" />
+            <span class="pred-radio-btn">1–2</span>
+          </label>
+          <label class="pred-radio-label">
+            <input type="radio" name="sc_count" value="3+" />
+            <span class="pred-radio-btn">3+</span>
+          </label>
+        </div>
+        <div class="pred-result-badge" id="badge-sc" style="display:none;margin-top:0.4rem;"></div>
+      </section>
+
+      <!-- Cars Retired -->
+      <section class="pred-section">
+        <div class="pred-section-header">
+          <span class="pred-section-title">Cars Retired</span>
+          <span class="pred-pts">10 pts exact &nbsp;|&nbsp; 5 pts ±1</span>
+        </div>
+        <div class="pred-field" id="field-retired">
+          <select class="pred-select" name="retirements" id="retirements" style="max-width:180px;">
+            <option value="">— Select —</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10+</option>
+          </select>
+          <div class="pred-result-badge" id="badge-retired" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- Submit -->
+      <div class="pred-submit-row">
+        <button type="submit" class="btn btn-primary pred-submit" id="submit-btn">
+          Save Prediction
+        </button>
+        <span class="pred-saved-note" id="saved-note"></span>
+      </div>
+
+    </form>
+
+    <!-- Score summary (shown after results arrive) -->
+    <div class="pred-score-card" id="score-card" style="display:none;">
+      <div class="pred-score-heading">Your Score</div>
+      <div class="pred-score-total" id="score-total"></div>
+      <div class="pred-score-breakdown" id="score-breakdown"></div>
+    </div>
+
+    <!-- Fetch results button (always shown after race, triggers OpenF1 pull) -->
+    <div class="pred-fetch-row" id="fetch-row" style="display:none;">
+      <button class="btn btn-ghost" id="fetch-btn">🔄 Fetch Official Results from OpenF1</button>
+      <span class="pred-fetch-note" id="fetch-note"></span>
+    </div>
+
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/predict.js"></script>
+</body>
+</html>

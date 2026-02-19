@@ -120,6 +120,35 @@ function renderNextRace() {
   }
 }
 
+/* ── Leaderboard card renderer ───────────────────────────────────────── */
+async function renderLeaderboard() {
+  const el = document.getElementById("leaderboard-content");
+  if (!el) return;
+
+  try {
+    const res  = await fetch("https://f1predictions.stiliyan1703.workers.dev/leaderboard");
+    const data = await res.json();
+
+    if (!data.ok || !data.leaderboard || data.leaderboard.length === 0) {
+      el.innerHTML = `<p class="lb-empty">No scores yet. Be the first to predict!</p>`;
+      return;
+    }
+
+    el.innerHTML = data.leaderboard.map((row, i) => {
+      const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`;
+      return `
+        <div class="lb-row">
+          <span class="lb-pos">${medal}</span>
+          <span class="lb-user">${row.username}</span>
+          <span class="lb-pts">${row.total_points} pts</span>
+          <span class="lb-rounds">${row.rounds_played}R</span>
+        </div>`;
+    }).join("");
+  } catch (err) {
+    el.innerHTML = `<p class="lb-empty">Could not load leaderboard.</p>`;
+  }
+}
+
 /* ── Boot ────────────────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", () => {
   AUTH.requireAuth();
@@ -138,4 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render next race card
   renderNextRace();
+
+  // Render leaderboard
+  renderLeaderboard();
 });
